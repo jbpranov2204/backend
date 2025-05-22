@@ -18,14 +18,8 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)  # Enable CORS for Flutter frontend
 
-# Database configuration
-DB_CONFIG = {
-    'dbname': os.getenv('DB_NAME', 'llm_postgres'),
-    'user': os.getenv('DB_USER', 'postgres'),
-    'password': os.getenv('DB_PASSWORD', 'postgres'),
-    'host': os.getenv('DB_HOST', 'localhost'),
-    'port': os.getenv('DB_PORT', '5432')
-}
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_API_URL = os.getenv("GEMINI_API_URL")
@@ -33,8 +27,8 @@ GEMINI_API_URL = os.getenv("GEMINI_API_URL")
 
 def get_db_connection():
     try:
-        logger.debug(f"Attempting to connect to database with config: {DB_CONFIG}")
-        conn = psycopg2.connect(**DB_CONFIG)
+        logger.debug(f"Attempting to connect to database with URL: {DATABASE_URL}")
+        conn = psycopg2.connect(DATABASE_URL)
         return conn
     except psycopg2.Error as e:
         logger.error(f"Database connection error: {e}")
